@@ -1,0 +1,14 @@
+.vs/
+Logs/
+OneLog/bin/
+OneLog/obj/
+TestApi/bin/
+TestApi/obj/
+Tests/bin/
+Tests/obj/
+src/OneLog/bin/
+src/OneLog/obj/
+test/OneLog.Tests/bin/
+test/OneLog.Tests/obj/
+TestApi/Properties/launchSettings.json
+TestApi/

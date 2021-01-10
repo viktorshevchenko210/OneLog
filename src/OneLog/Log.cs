@@ -1,45 +1,53 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using OneLog.Models;
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("OneLog.Tests")]
 
 namespace OneLog
 {
-    internal class Log : OneLog.ILogger, Microsoft.Extensions.Logging.ILogger
+    internal class Log : OneLog.ILogger
     {
-        public Request Request { get; }
+        private readonly IHttpContextAccessor accessor;
+        public ConcurrentDictionary<Guid, Request> Requests { get; }
 
         public Log(IHttpContextAccessor accessor)
         {
-            Request = new Request(accessor.HttpContext?.Request.Path.Value); 
+            Requests = new ConcurrentDictionary<Guid, Request>();
+            this.accessor = accessor;
         }
 
         public void LogEvent(string name, string value, EventCategory category)
         {
-            Request.AddEvent(name, value, category);
+            if(!Requests.TryGetValue(TraceId, out Request request))        
+                request = CreateRequest();
+
+            request.AddEvent(name, value, category);
         }
 
         public void LogException(Exception exception)
         {
-            Request.AddException(exception);
+            if (!Requests.TryGetValue(TraceId, out Request request))
+                request = CreateRequest();
+
+            request.AddException(exception);
         }
 
-        void Microsoft.Extensions.Logging.ILogger.Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+        private Request CreateRequest()
         {
-
+            return new Request(accessor.HttpContext?.Request.Path.Value);
         }
 
-        public bool IsEnabled(LogLevel logLevel)
+        private Guid TraceId
         {
-            throw new NotImplementedException();
-        }
-
-        public IDisposable BeginScope<TState>(TState state)
-        {
-            throw new NotImplementedException();
+            get
+            {
+                return (Guid)(accessor.HttpContext?
+                    .Items["TraceIdentifier"] ?? Guid.Empty);
+            }
         }
     }
 }

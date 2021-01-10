@@ -48,7 +48,7 @@ namespace Tests.Benchmarks
 
             accessor.HttpContext = httpContext;
 
-            return new Log(accessor);
+            return new Logger(accessor);
         }
 
         [Benchmark]

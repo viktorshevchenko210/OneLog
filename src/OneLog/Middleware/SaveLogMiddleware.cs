@@ -33,7 +33,7 @@ namespace OneLog.Middleware
         {
             Guid requestId = TraceId(context);
 
-            if (log.Requests.TryGetValue(requestId, out Request request))
+            if (log.Requests.TryRemove(requestId, out Request request))
             {
                 file.Write(request);
             }

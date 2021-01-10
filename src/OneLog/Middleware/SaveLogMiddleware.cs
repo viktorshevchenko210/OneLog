@@ -43,10 +43,5 @@ namespace OneLog.Middleware
         {
             return (Guid)(context.Items["TraceIdentifier"] ?? Guid.Empty);
         }
-
-        private void WriteRequest()
-        {
-
-        }
     }
 }

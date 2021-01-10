@@ -21,23 +21,30 @@ namespace OneLog
 
         public void LogEvent(string name, string value, EventCategory category)
         {
-            if(!Requests.TryGetValue(TraceId, out Request request))        
-                request = CreateRequest();
+            Guid traceId = TraceId;
 
+            Request request = CreateRequest(traceId);
             request.AddEvent(name, value, category);
+
+            Requests[traceId] = request;
         }
 
         public void LogException(Exception exception)
         {
-            if (!Requests.TryGetValue(TraceId, out Request request))
-                request = CreateRequest();
+            Guid traceId = TraceId;
 
+            Request request = CreateRequest(traceId);
             request.AddException(exception);
+
+            Requests[traceId] = request;
         }
 
-        private Request CreateRequest()
+        private Request CreateRequest(Guid traceId)
         {
-            return new Request(TraceId, accessor.HttpContext?.Request.Path.Value);
+            if (!Requests.TryGetValue(traceId, out Request request))
+                request = new Request(traceId, accessor.HttpContext?.Request.Path.Value);
+
+            return request;
         }
 
         private Guid TraceId

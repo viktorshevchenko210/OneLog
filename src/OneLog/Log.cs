@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using OneLog.Models;
 using System;
 using System.Runtime.CompilerServices;
@@ -7,13 +8,13 @@ using System.Runtime.CompilerServices;
 
 namespace OneLog
 {
-    internal class Log : ILogger
+    internal class Log : OneLog.ILogger, Microsoft.Extensions.Logging.ILogger
     {
         public Request Request { get; }
 
         public Log(IHttpContextAccessor accessor)
         {
-            Request = new Request(accessor.HttpContext.Request?.Path.Value); 
+            Request = new Request(accessor.HttpContext?.Request.Path.Value); 
         }
 
         public void LogEvent(string name, string value, EventCategory category)
@@ -24,6 +25,21 @@ namespace OneLog
         public void LogException(Exception exception)
         {
             Request.AddException(exception);
+        }
+
+        void Microsoft.Extensions.Logging.ILogger.Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+        {
+
+        }
+
+        public bool IsEnabled(LogLevel logLevel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDisposable BeginScope<TState>(TState state)
+        {
+            throw new NotImplementedException();
         }
     }
 }

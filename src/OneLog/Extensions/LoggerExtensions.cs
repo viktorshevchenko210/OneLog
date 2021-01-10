@@ -40,6 +40,7 @@ namespace OneLog.Extensions
         public static IApplicationBuilder UseOneLog(this IApplicationBuilder app)
         {
             app.UseMiddleware<SaveLogMiddleware>();
+            app.UseMiddleware<TraceIdMiddleware>();
             return app;
         }
     }

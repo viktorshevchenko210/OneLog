@@ -22,7 +22,7 @@ namespace OneLog.Models
         [JsonProperty(Order = 4)]
         public string Timestamp { get; private set; }
 
-        public Request(Guid id, string url)
+        internal Request(Guid id, string url)
         {
             this.Id = id;
             this.Url = url;

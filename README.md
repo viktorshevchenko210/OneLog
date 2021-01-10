@@ -35,14 +35,8 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 ```
 That is it for configuration and it is ready to use. 
 ## Usage
-Use ILogger interface. It consists of two methods: LogEvent and LogException.
+ILogger is injected into your controllers, services...
 ```
-public interface ILogger
-{
-   Request Request { get; }
-   void LogEvent(string name, string value, EventCategory category);
-   void LogException(Exception ex);
-}
 logger.LogEvent("REQEUST", "START", EventCategory.Information);
 ```
 ## Getting help

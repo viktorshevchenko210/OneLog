@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace OneLog.Models
 {
@@ -20,13 +19,13 @@ namespace OneLog.Models
         public List<CustomException> Exceptions { get; private set; } = new List<CustomException>();
 
         [JsonProperty(Order = 4)]
-        public string Timestamp { get; private set; }
+        public DateTime Timestamp { get; private set; }
 
         internal Request(Guid id, string url)
         {
             this.Id = id;
             this.Url = url;
-            this.Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+            this.Timestamp = DateTime.Now;
         }
 
         internal void AddEvent(string name, string value, EventCategory category)

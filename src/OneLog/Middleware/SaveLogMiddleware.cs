@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using OneLog.Infrastructure;
+using OneLog.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -18,14 +19,29 @@ namespace OneLog.Middleware
             try
             {
                 await _next.Invoke(context);
-                file.Write(log.Request);
+                WriteRequest(context, log, file);
             }
             catch (Exception ex)
             {
                 log.LogException(ex);
-                file.Write(log.Request);
+                WriteRequest(context, log, file);
                 throw;
             }
+        }
+
+        private void WriteRequest(HttpContext context, ILogger log, IFile file)
+        {
+            Guid requestId = TraceId(context);
+
+            if (log.Requests.TryRemove(requestId, out Request request))
+            {
+                file.Write(request);
+            }
+        }
+
+        private Guid TraceId(HttpContext context)
+        {
+            return (Guid)(context.Items["TraceIdentifier"] ?? Guid.Empty);
         }
     }
 }

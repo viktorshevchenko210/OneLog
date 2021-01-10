@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
 using OneLog.Infrastructure;
 using OneLog.Middleware;
 using OneLog.Models;
@@ -24,7 +23,7 @@ namespace OneLog.Extensions
             services.Configure<LoggerOptions>(configuration.GetSection("OneLog"));
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<ILogger, Log>();
+            services.AddSingleton<ILogger, Log>();
 
             services.AddSingleton<IClock, Clock>(serviceProvider =>
             {
@@ -40,6 +39,7 @@ namespace OneLog.Extensions
         public static IApplicationBuilder UseOneLog(this IApplicationBuilder app)
         {
             app.UseMiddleware<SaveLogMiddleware>();
+            app.UseMiddleware<TraceIdMiddleware>();
             return app;
         }
     }

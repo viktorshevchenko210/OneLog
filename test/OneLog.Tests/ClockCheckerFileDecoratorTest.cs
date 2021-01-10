@@ -87,7 +87,7 @@ namespace Tests
 
         private Request CreateRequest()
         {
-            var request = new Request(url);
+            var request = new Request(Guid.NewGuid(), url);
             request.AddEvent("TEST_EVENT", "1", EventCategory.Information);
 
             try

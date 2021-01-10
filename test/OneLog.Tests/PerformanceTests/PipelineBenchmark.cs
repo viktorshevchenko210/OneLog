@@ -39,22 +39,29 @@ namespace Tests.Benchmarks
             file = sp.GetRequiredService<ClockCheckerFileDecorator>();
         }
 
-        private ILogger CreateLogger()
+        private ILogger CreateLogger(IHttpContextAccessor accessor)
+        {
+            return new Log(accessor);
+        }
+
+        private HttpContextAccessor CreateHttpContextAccessor()
         {
             var accessor = new HttpContextAccessor();
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Path = "/api/test";
+            httpContext.Items.Add("TraceIdentifier", Guid.NewGuid());
 
             accessor.HttpContext = httpContext;
 
-            return new Log(accessor);
+            return accessor;
         }
 
         [Benchmark]
         public void LogWithException()
         {
-            var logger = CreateLogger();
+            var accessor = CreateHttpContextAccessor();
+            var logger = CreateLogger(accessor);
 
             for (int j = 0; j < 5; j++)
             {
@@ -70,20 +77,36 @@ namespace Tests.Benchmarks
                 logger.LogException(ex);
             }
 
-            file.Write(logger.Request);
+            WriteRequest(accessor.HttpContext, logger, file);
         }
 
         [Benchmark]
         public void LogWithoutException()
         {
-            var logger = CreateLogger();
+            var accessor = CreateHttpContextAccessor();
+            var logger = CreateLogger(accessor);
 
             for (int j = 0; j < 5; j++)
             {
                 logger.LogEvent("TEST_EVENT", "TEST_EVENT", EventCategory.Information);
             }
 
-            file.Write(logger.Request);
+            WriteRequest(accessor.HttpContext, logger, file);
+        }
+
+        private void WriteRequest(HttpContext context, ILogger log, IFile file)
+        {
+            Guid requestId = TraceId(context);
+
+            if (log.Requests.TryRemove(requestId, out Request request))
+            {
+                file.Write(request);
+            }
+        }
+
+        private Guid TraceId(HttpContext context)
+        {
+            return (Guid)(context.Items["TraceIdentifier"] ?? Guid.Empty);
         }
     }
 }

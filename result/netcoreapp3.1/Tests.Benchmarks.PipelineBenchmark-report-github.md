@@ -10,5 +10,5 @@ Intel Core i5-4200M CPU 2.50GHz (Haswell), 1 CPU, 4 logical and 2 physical cores
 ```
 |              Method |     Mean |    Error |   StdDev |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |-------------------- |---------:|---------:|---------:|-------:|------:|------:|----------:|
-|    LogWithException | 75.17 μs | 1.300 μs | 1.906 μs | 6.5918 |     - |     - |  10.26 KB |
-| LogWithoutException | 17.73 μs | 0.354 μs | 0.673 μs | 3.3569 |     - |     - |   5.15 KB |
+|    LogWithException | 94.93 μs | 1.863 μs | 2.487 μs | 7.8125 |     - |     - |  12.05 KB |
+| LogWithoutException | 30.64 μs | 0.572 μs | 0.587 μs | 5.1880 |     - |     - |   8.01 KB |

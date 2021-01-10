@@ -22,9 +22,9 @@ namespace OneLog.Models
         [JsonProperty(Order = 4)]
         public string Timestamp { get; private set; }
 
-        public Request(string url)
+        internal Request(Guid id, string url)
         {
-            this.Id = Guid.NewGuid();
+            this.Id = id;
             this.Url = url;
             this.Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
         }

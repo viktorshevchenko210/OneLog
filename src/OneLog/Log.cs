@@ -2,7 +2,6 @@
 using OneLog.Models;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("OneLog.Tests")]
@@ -38,7 +37,7 @@ namespace OneLog
 
         private Request CreateRequest()
         {
-            return new Request(accessor.HttpContext?.Request.Path.Value);
+            return new Request(TraceId, accessor.HttpContext?.Request.Path.Value);
         }
 
         private Guid TraceId

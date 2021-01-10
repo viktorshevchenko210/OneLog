@@ -3,13 +3,15 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <Authors>Viktor Shevchenko</Authors>
-    <Description>Logger for writing structured events to file</Description>
+    <Description>Logger for writing structured events into file.</Description>
     <PackageTags>onelog, logging, structured</PackageTags>
     <Company />
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression></PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.0</Version>
+    <Version>3.0.0</Version>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <RepositoryUrl>https://github.com/viktorshevchenko210/OneLog</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

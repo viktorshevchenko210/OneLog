@@ -23,7 +23,7 @@ namespace OneLog.Extensions
             services.Configure<LoggerOptions>(configuration.GetSection("OneLog"));
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<ILogger, Log>();
+            services.AddSingleton<ILogger, Log>();
 
             services.AddSingleton<IClock, Clock>(serviceProvider =>
             {
